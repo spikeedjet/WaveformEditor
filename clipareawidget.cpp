@@ -177,15 +177,8 @@ void ClipAreaWidget::mouseMoveEvent(QMouseEvent *event)  {
             isDraggingWave = false;
             draggingWaveIndex = -1;
             Qt::DropAction result = drag->exec(Qt::MoveAction | Qt::CopyAction, Qt::MoveAction);
-            if (result == Qt::MoveAction) {
-                // 拖拽到本窗口，删除原有
-                if (removeIdx >= 0 && removeIdx < waves.size()) {
-                    delete waves[removeIdx];
-                    waves.removeAt(removeIdx);
-                    update();
-                }
-            } else if (dragLeftWidget) {
-                // 拖拽到窗口外部，删除原有
+            // 仅拖拽到窗口外部时删除原有
+            if (dragLeftWidget) {
                 if (removeIdx >= 0 && removeIdx < waves.size()) {
                     delete waves[removeIdx];
                     waves.removeAt(removeIdx);
@@ -193,7 +186,7 @@ void ClipAreaWidget::mouseMoveEvent(QMouseEvent *event)  {
                 }
                 dragLeftWidget = false;
             }
-            // 拖拽未成功，保留原有
+            // 拖拽未成功或拖回本窗口，保留原有
         }
     }
 }
